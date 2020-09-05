@@ -1,0 +1,32 @@
+---
+- name: install packages
+  apt: name={{ packages }} state=present update_cache=yes cache_valid_time={{ 24 * 3600 }}
+  vars:
+    packages:
+      - docker.io
+      - python3-distutils  # https://bugs.launchpad.net/ubuntu/+source/apt-btrfs-snapshot/+bug/1763923
+      - python3-docker
+
+- name: create home-assistant storage
+  docker_volume: volume_name=home-assistant state=present
+
+- name: pull the latest home-assistant image
+  docker_image: name=homeassistant/home-assistant:stable source=pull state=present force_source=yes
+
+- name: install home-assisstant service
+  copy: >-
+    src=home-assistant.service
+    dest=/etc/systemd/system/home-assistant.service
+    owner=root
+    group=root
+    mode=0644
+  register: home_assistant_service
+  notify:
+    - restart home-assistant
+
+- name: reload systemd
+  systemd: daemon_reload=yes
+  when: home_assistant_service is changed
+
+- name: start home-assistant service
+  service: name=home-assistant state=started enabled=yes

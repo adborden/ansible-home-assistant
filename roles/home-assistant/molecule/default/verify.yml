@@ -1,0 +1,20 @@
+---
+- name: Verify
+  hosts: all
+  tasks:
+    - name: docker is installed
+      apt: name=docker.io state=present
+
+    - name: home-assistant systemd service is installed
+      file: >-
+        path=/etc/systemd/system/home-assistant.service
+        owner=root
+        group=root
+        mode=0644
+        state=file
+
+    - name: home-assistant service is started and enabled
+      service: name=home-assistant state=started enabled=yes
+
+    - name: assert root cannot login
+      lineinfile: path=/etc/ssh/sshd_config line="PermitRootLogin no" state=present

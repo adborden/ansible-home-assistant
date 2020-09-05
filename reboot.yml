@@ -1,0 +1,14 @@
+---
+- name: Reboot
+  hosts: all
+  gather_facts: no
+  become: yes
+  become_user: root
+  tasks:
+    - name: check if reboot is required
+      stat: path=/var/run/reboot-required
+      register: reboot_required
+
+    - name: reboot
+      reboot:
+      when: reboot_required.stat.exists

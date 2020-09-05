@@ -1,0 +1,11 @@
+galaxy_info:
+  author: Aaron D Borden
+  description: Install Home Assistant as a docker container managed by systemd
+
+  license: AGPL-3.0-or-later
+
+  min_ansible_version: 2.9
+
+  galaxy_tags: []
+
+dependencies: []
