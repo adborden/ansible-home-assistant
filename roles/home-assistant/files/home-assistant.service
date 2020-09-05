@@ -9,7 +9,7 @@ Restart=always
 ExecStartPre=-/usr/bin/docker stop %N
 ExecStartPre=-/usr/bin/docker rm %N
 ExecStartPre=/usr/bin/docker pull homeassistant/home-assistant:stable
-ExecStart=/usr/bin/docker run --rm --name %N --net host --volume home-assistant --device /dev/ttyUSB0 --device /dev/ttyUSB1 homeassistant/home-assistant:stable
+ExecStart=/usr/bin/docker run --rm --name %N --net host --volume /var/lib/home-assistant/config:/config --device /dev/ttyUSB0 --device /dev/ttyUSB1 homeassistant/home-assistant:stable
 ExecStop=/usr/bin/docker stop %N
 
 [Install]

@@ -8,7 +8,10 @@
       - python3-docker
 
 - name: create home-assistant storage
-  docker_volume: volume_name=home-assistant state=present
+  file: path=/var/lib/home-assistant state=directory owner=root group=root mode=0750
+
+#- name: configure home-assistant
+#  git: repo=https://github.com/adborden/home-assistant.git dest=/var/lib/home-assistant
 
 - name: pull the latest home-assistant image
   docker_image: name=homeassistant/home-assistant:stable source=pull state=present force_source=yes
