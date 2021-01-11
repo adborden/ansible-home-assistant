@@ -26,6 +26,4 @@ jobs:
         run: pipenv sync --dev
 
       - name: molecule test
-        run: |
-          cd roles/home-assistant
-          pipenv run molecule test --all
+        run: pipenv run test-home-assistant
