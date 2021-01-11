@@ -1,0 +1,21 @@
+---
+name: Test
+
+on:
+  push:
+
+jobs:
+  home-assistant:
+    name: home-assistant
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: install dependencies
+        run: pipenv sync --dev
+
+      - name: molecule test
+        run: |
+          cd roles/home-assistant
+          pipenv run molecule test --all
