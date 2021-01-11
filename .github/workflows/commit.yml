@@ -19,7 +19,7 @@ jobs:
 
       - name: install pipenv
         run: |
-          python -m pip install --user pipenv
+          python3 -m pip install --user pipenv
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: install dependencies
