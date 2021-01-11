@@ -14,8 +14,7 @@ jobs:
 
       - name: install dependencies
         run: |
-          pip install wheel
-          pip install pipenv
+          pip3 install pipenv
           pipenv sync --dev
 
       - name: molecule test
