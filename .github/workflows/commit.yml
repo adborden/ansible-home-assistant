@@ -8,13 +8,16 @@ jobs:
   home-assistant:
     name: home-assistant
     runs-on: ubuntu-latest
+    environment:
+
     steps:
       - name: checkout
         uses: actions/checkout@v2
 
       - name: install pipenv
         run: |
-          python3 -m pip install pipenv
+          python -m pip install --user pipenv
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: install dependencies
         run: pipenv sync --dev
