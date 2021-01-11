@@ -17,9 +17,16 @@ jobs:
         with:
           python-version: "3.8"
 
+      - uses: actions/cache@v2
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-pipenv-v1-${{ hashFiles('Pipfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pipenv-
+
       - name: install pipenv
         run: |
-          python3 -m pip install --user pipenv
+          python -m pip install --user pipenv
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: install dependencies
