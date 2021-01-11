@@ -12,10 +12,12 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
-      - name: install dependencies
+      - name: install pipenv
         run: |
-          pip3 install pipenv
-          pipenv sync --dev
+          python3 -m pip install pipenv
+
+      - name: install dependencies
+        run: pipenv sync --dev
 
       - name: molecule test
         run: |
