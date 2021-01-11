@@ -8,8 +8,6 @@ jobs:
   home-assistant:
     name: home-assistant
     runs-on: ubuntu-latest
-    environment:
-
     steps:
       - name: checkout
         uses: actions/checkout@v2
