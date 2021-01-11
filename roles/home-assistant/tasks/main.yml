@@ -15,8 +15,9 @@
 
 - name: pull the latest home-assistant image
   docker_image: name=homeassistant/home-assistant:stable source=pull state=present force_source=yes
+  notify: restart home-assistant
 
-- name: install home-assisstant service
+- name: install home-assistant service
   copy: >-
     src=home-assistant.service
     dest=/etc/systemd/system/home-assistant.service
@@ -24,8 +25,7 @@
     group=root
     mode=0644
   register: home_assistant_service
-  notify:
-    - restart home-assistant
+  notify: restart home-assistant
 
 - name: reload systemd
   systemd: daemon_reload=yes
