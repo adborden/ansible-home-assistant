@@ -7,11 +7,11 @@
       - python3-distutils  # https://bugs.launchpad.net/ubuntu/+source/apt-btrfs-snapshot/+bug/1763923
       - python3-docker
 
+- name: enable docker
+  systemd: name=docker state=started enabled=true daemon_reload=yes
+
 - name: create home-assistant storage
   file: path=/var/lib/home-assistant state=directory owner=root group=root mode=0750
-
-#- name: configure home-assistant
-#  git: repo=https://github.com/adborden/home-assistant.git dest=/var/lib/home-assistant
 
 - name: pull the latest home-assistant image
   docker_image: name=homeassistant/home-assistant:stable source=pull state=present force_source=yes
