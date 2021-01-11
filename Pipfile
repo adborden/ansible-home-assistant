@@ -10,3 +10,6 @@ molecule = {extras = ["docker"], version = "*"}
 
 [requires]
 python_version = "3.8"
+
+[scripts]
+test-home-assistant = "bash -c 'cd roles/home-assistant && molecule test --all'"
