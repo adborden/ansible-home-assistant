@@ -7,6 +7,19 @@
       - python3-distutils  # https://bugs.launchpad.net/ubuntu/+source/apt-btrfs-snapshot/+bug/1763923
       - python3-docker
 
+- name: enable docker
+  systemd: name=docker state=started enabled=true daemon_reload=yes
+
+- name: install docker maintenance crontab
+  cron:
+    cron_file: docker
+    hour: "3"
+    minute: "0"
+    name: docker prune
+    job: docker image prune --force > /dev/null
+    user: root
+    state: present
+
 - name: create home-assistant storage
   file: path=/var/lib/home-assistant state=directory owner=root group=root mode=0750
 
