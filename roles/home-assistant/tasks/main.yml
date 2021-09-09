@@ -46,3 +46,12 @@
 
 - name: start home-assistant service
   service: name=home-assistant state=started enabled=yes
+
+- name: install home-assistant maintenance crontab
+  cron:
+    cron_file: home-assistant
+    special_time: monthly
+    name: sqlite3 vacuum
+    job: find /var/lib/home-assistant -name '*.db' | xargs -I% sqlite3 % "VACUUM;"
+    user: root
+    state: present
