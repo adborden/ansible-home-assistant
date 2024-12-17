@@ -4,8 +4,75 @@
   vars:
     packages:
       - docker.io
-      - python3-distutils  # https://bugs.launchpad.net/ubuntu/+source/apt-btrfs-snapshot/+bug/1763923
+      - duply
       - python3-docker
+      - sqlite3
+
+- name: configure duply backup
+  unarchive:
+    src: secrets/duply-backup.tar.xz
+    dest: /
+    creates: /etc/duply/home-assistant/conf
+    owner: root
+    group: root
+
+- name: create ssh dir
+  file: path=/root/.ssh mode=0o700 owner=root group=root state=directory
+
+- name: install ssh private key
+  copy:
+    src: secrets/id_rsa
+    dest: /root/.ssh/id_rsa
+    owner: root
+    group: root
+    mode: 0o600
+
+- name: install ssh public key
+  copy:
+    src: secrets/id_rsa.pub
+    dest: /root/.ssh/id_rsa.pub
+    owner: root
+    group: root
+    mode: 0o644
+
+- name: set backup destination known_hosts
+  known_hosts:
+    host: gnubee-pc1.lan
+    key: '{{ item }}'
+    state: present
+  loop:
+    - gnubee-pc1.lan ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDXw842mUnCTIlp2IxEZ54ZeMN/JAfQE6ZXQzcPqU0QtLA5+jdZxH2TSE0NIMklGJfFKfEZeKL7O6An4t/J2ng3fmtPXHmM7mDLq4hJ69/W4kLTkxcexljdQFb82hFEli1+tdnVBFXDDptAeNGexgnXORXbJufe0sImXjYCrUCSOfuS1ZIS4bW134cNgkQQTJim3SO8LorjBm+5DEv15RLkmpzpKLIWh7dKdliOrvixxHeT2FV8SbJMb5NEdw58bzxrCrtN2nNkRc4RIRaRjz7HWxstMcPSXyd8tUyYt3cGbLnz7HdUK1WEpBSHAY4OjFt7MRDqX3yj4WGgapftCSmgoPTErWdGYG7JArbnBwF6pkErKv6LGWRt7Le0it6NgkDUAF8Au09xbkMgXrYyOruVxDfeQ83OMib6yVzupX8rDUzIMq0S40UQPZEcqppjsUFhKUcYaUZVsCHihJ0elGzNdJgu/5mZUMB1mfnpWO1Boucmd00vZNEyjFcFxJXYP4s=
+    - gnubee-pc1.lan ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBChKGucZqYAIhl2TJPB8wyO1SEk9YedDQIJxS22GHJD
+    - gnubee-pc1.lan ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBF5VO2WikLPo/fzUQzteQ4KtxZiSmD44Du/IPDh2nTrzdbf0SC1231zh8tDTPh1MVzGnva6FyoXRiNIm5mqKoNA=
+
+- name: configure duply-backup service
+  copy:
+    src: duply-backup@.service
+    dest: /etc/systemd/system/duply-backup@.service
+    owner: root
+    group: root
+    mode: 0o644
+  register: duply_backup_service
+
+- name: configure duply-backup timer
+  copy:
+    src: duply-backup@.timer
+    dest: /etc/systemd/system/duply-backup@.timer
+    owner: root
+    group: root
+    mode: 0o644
+  register: duply_backup_timer
+
+- name: reload systemd
+  systemd: daemon_reload=yes
+  when:
+    - duply_backup_service is changed or duply_backup_timer is changed
+
+- name: enable duply-backup timer
+  systemd:
+    name: duply-backup@home-assistant.timer
+    enabled: true
+    state: started
 
 - name: enable docker
   systemd: name=docker state=started enabled=true daemon_reload=yes
