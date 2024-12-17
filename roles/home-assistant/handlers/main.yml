@@ -1,3 +1,6 @@
 ---
 - name: restart home-assistant
   service: name=home-assistant state=restarted
+
+- name: reload nginx
+  service: name=nginx state=reloaded

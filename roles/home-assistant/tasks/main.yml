@@ -5,6 +5,7 @@
     packages:
       - docker.io
       - duply
+      - nginx
       - python3-docker
       - sqlite3
 
@@ -122,3 +123,12 @@
     job: find /var/lib/home-assistant -name '*.db' | xargs -I% sqlite3 % "VACUUM;"
     user: root
     state: present
+
+- name: configure nginx
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/sites-enabled/home-assistant.conf
+    mode: 0644
+    owner: root
+    group: root
+  notify: reload nginx
