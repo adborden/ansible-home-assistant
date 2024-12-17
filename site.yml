@@ -7,4 +7,12 @@
     - role: hifis.unattended_upgrades
       vars:
         unattended_automatic_reboot: true
+    - role: sansible.ssmtp
+      vars:
+        sansible_ssmtp_group: ssmtp
+        sansible_ssmtp_user: ssmtp
+        sansible_ssmtp_mailserver_username: "{{ secret_ssmtp_auth_user }}"
+        sansible_ssmtp_mailserver_password: "{{ secret_ssmtp_auth_pass }}"
+        sansible_ssmtp_mailserver_host: smtp.gmail.com
+        sansible_ssmtp_mailserver_port: "587"
     - home-assistant
