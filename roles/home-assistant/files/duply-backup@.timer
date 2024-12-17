@@ -1,0 +1,12 @@
+[Unit]
+Description=duply-backup %i timer
+
+[Timer]
+Unit=duply-backup@%i.service
+# Daily at 12:30 AM
+OnCalendar=00:30:00
+AccuracySec=10m
+Persistent=true
+
+[Install]
+WantedBy=timers.target

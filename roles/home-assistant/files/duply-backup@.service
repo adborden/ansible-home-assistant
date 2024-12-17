@@ -1,0 +1,13 @@
+[Unit]
+Description=%i backup service using duply
+Documentation=man:duply(1)
+CollectMode=inactive-or-failed
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/duply %i backup_purge --force
+# Give 120 seconds to gracefully stop before hard killing it.
+TimeoutStopSec=120
+Nice=19
+CPUSchedulingPolicy=idle
+IOSchedulingClass=idle
