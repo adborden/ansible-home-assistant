@@ -1,0 +1,34 @@
+---
+- name: install packages
+  apt: name={{ packages }} state=present update_cache=yes cache_valid_time={{ 24 * 3600 }}
+  vars:
+    packages:
+      - certbot
+      - nginx
+      - python3-certbot-dns-google
+
+- name: copy dns secrets
+  copy:
+    src: "{{ playbook_dir }}/secrets/google-account.json"
+    dest: /etc/google-account.json
+    owner: root
+    group: root
+    mode: 0600
+
+- name: create certificate
+  command: certbot certonly --agree-tos -m adborden@a14n.net --dns-google --dns-google-credentials /etc/google-account.json -d home.lunarkittylanding.party
+  args:
+    creates: /etc/letsencrypt/live/home.lunarkittylanding.party/cert.pem
+  tags:
+    - molecule-notest
+
+# TODO remove me, certbot includes a systemd timer
+- name: install cron for certificate renew
+  cron:
+    name: certbot-renew
+    cron_file: certbot-renew
+    hour: "3"
+    minute: "0"
+    job: certbot renew
+    state: absent
+    user: root

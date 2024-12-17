@@ -1,0 +1,23 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  tasks:
+    - name: check certbot
+      stat: path=/usr/bin/certbot
+      register: certbot
+
+    - name: cerbot is installed
+      assert:
+        that: certbot.stat.exists
+
+    - name: stat dns credentials
+      stat: path=/etc/google-account.json
+      register: google_account
+
+    - name: assert google account credentials have correct permissions
+      assert:
+        that:
+          - google_account.stat.exists
+          - google_account.stat.mode == '0600'

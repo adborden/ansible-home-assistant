@@ -1,0 +1,14 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: unubtu-focal
+    image: ubuntu:focal
+  - name: debian-buster
+    image: debian:buster
+provisioner:
+  name: ansible
+verifier:
+  name: testinfra

@@ -1,0 +1,10 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include certbot"
+      include_role:
+        name: "certbot"
+      vars:
+        certbot_credentials: |-
+          test credentials

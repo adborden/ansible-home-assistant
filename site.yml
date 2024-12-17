@@ -18,6 +18,7 @@
         sansible_ssmtp_mailserver_password: "{{ secret_ssmtp_auth_pass }}"
         sansible_ssmtp_mailserver_host: smtp.gmail.com
         sansible_ssmtp_mailserver_port: "587"
+    - certbot
     - home-assistant
   tasks:
     - name: enable runtime watchdog
