@@ -3,6 +3,9 @@
   hosts: all
   become: yes
   become_user: root
+  handlers:
+    - name: reload systemd
+      systemd: daemon_reload=yes
   roles:
     - role: hifis.unattended_upgrades
       vars:
@@ -16,3 +19,19 @@
         sansible_ssmtp_mailserver_host: smtp.gmail.com
         sansible_ssmtp_mailserver_port: "587"
     - home-assistant
+  tasks:
+    - name: enable runtime watchdog
+      lineinfile:
+        line: RuntimeWatchdogSec=15
+        regexp: RuntimeWatchdogSec=
+        path: /etc/systemd/system.conf
+        state: present
+      notify: reload systemd
+
+    - name: enable reboot watchdog
+      lineinfile:
+        line: RebootWatchdogSec=10min
+        regexp: RebootWatchdogSec=
+        path: /etc/systemd/system.conf
+        state: present
+      notify: reload systemd
