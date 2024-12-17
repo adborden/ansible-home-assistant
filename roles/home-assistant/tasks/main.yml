@@ -78,6 +78,14 @@
 - name: enable docker
   systemd: name=docker state=started enabled=true daemon_reload=yes
 
+- name: install docker-pull-restart script
+  copy: >-
+    src=docker-pull-restart.sh
+    dest=/usr/local/bin/docker-pull-restart
+    owner=root
+    group=root
+    mode=0755
+
 - name: install docker maintenance crontab
   cron:
     cron_file: docker
@@ -91,12 +99,10 @@
 - name: create home-assistant storage
   file: path=/var/lib/home-assistant state=directory owner=root group=root mode=0750
 
-#- name: configure home-assistant
-#  git: repo=https://github.com/adborden/home-assistant.git dest=/var/lib/home-assistant
-
 - name: pull the latest home-assistant image
   docker_image: name=homeassistant/home-assistant:stable source=pull state=present force_source=yes
   notify: restart home-assistant
+  check_mode: no
 
 - name: install home-assistant service
   copy: >-
@@ -121,6 +127,15 @@
     special_time: monthly
     name: sqlite3 vacuum
     job: find /var/lib/home-assistant -name '*.db' | xargs -I% sqlite3 % "VACUUM;"
+    user: root
+    state: present
+
+- name: install home-assistant update crontab
+  cron:
+    cron_file: home-assistant
+    special_time: daily
+    name: update home-assistant
+    job: /usr/local/bin/docker-pull-restart home-assistant
     user: root
     state: present
 
