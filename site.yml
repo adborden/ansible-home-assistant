@@ -4,4 +4,7 @@
   become: yes
   become_user: root
   roles:
+    - role: hifis.unattended_upgrades
+      vars:
+        unattended_automatic_reboot: true
     - home-assistant
