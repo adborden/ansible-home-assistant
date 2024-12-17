@@ -5,11 +5,12 @@ Requires=docker.service
 
 [Service]
 TimeoutStartSec=600
+TimeoutStopSec=300
 Restart=always
 ExecStartPre=-/usr/bin/docker stop %N
 ExecStartPre=-/usr/bin/docker rm %N
 ExecStart=/usr/bin/docker run --rm --name %N --net host --volume /var/lib/home-assistant/config:/config --device /dev/ttyUSB0 --device /dev/ttyUSB1 homeassistant/home-assistant:stable
-ExecStop=/usr/bin/docker stop %N
+ExecStop=/usr/bin/docker stop --time 300 %N
 
 [Install]
 WantedBy=multi-user.target

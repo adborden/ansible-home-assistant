@@ -1,1 +1,2 @@
-ubuntu ansible_user=ubuntu
+#home.lunarkittylanding.party ansible_user=ubuntu
+home-assistant.lan ansible_user=ubuntu
