@@ -9,8 +9,11 @@ TimeoutStopSec=300
 Restart=always
 ExecStartPre=-/usr/bin/docker stop %N
 ExecStartPre=-/usr/bin/docker rm %N
-ExecStart=/usr/bin/docker run --rm --name %N --net host --volume /var/lib/home-assistant/config:/config --device /dev/ttyUSB0 --device /dev/ttyUSB1 homeassistant/home-assistant:stable
+ExecStart=/usr/bin/docker run --rm --name %N --net host --volume /var/lib/home-assistant/config:/config --device /dev/ttyUSB0 --device /dev/ttyUSB1 --health-cmd "curl --silent --fail --output /dev/null localhost:8123" --health-start-period=60s homeassistant/home-assistant:stable
 ExecStop=/usr/bin/docker stop --time 300 %N
+StartLimitAction=reboot
+StartLimitBurst=4
+StartLimitIntervalSec=10m
 
 [Install]
 WantedBy=multi-user.target
