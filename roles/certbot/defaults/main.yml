@@ -1,2 +1,3 @@
 ---
 # defaults file for certbot
+certbot_google_credentials: "{{ playbook_dir }}/secrets/google-account.json"

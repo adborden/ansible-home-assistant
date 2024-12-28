@@ -9,7 +9,7 @@
 
 - name: copy dns secrets
   copy:
-    src: "{{ playbook_dir }}/secrets/google-account.json"
+    src: "{{ certbot_google_credentials }}"
     dest: /etc/google-account.json
     owner: root
     group: root
