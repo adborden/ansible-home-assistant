@@ -22,7 +22,7 @@
 
 - name: install ssh private key
   copy:
-    src: secrets/id_rsa
+    src: "{{ home_assistant_ssh_private_key_file }}"
     dest: /root/.ssh/id_rsa
     owner: root
     group: root
@@ -30,7 +30,7 @@
 
 - name: install ssh public key
   copy:
-    src: secrets/id_rsa.pub
+    src: "{{ home_assistant_ssh_public_key_file }}"
     dest: /root/.ssh/id_rsa.pub
     owner: root
     group: root
