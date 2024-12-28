@@ -1,0 +1,8 @@
+---
+collections:
+  - name: community.docker
+roles:
+  - name: hifis.unattended_upgrades
+    version: v3.2.1
+  - name: sansible.ssmtp
+    version: v2.1.4
