@@ -5,6 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 molecule = {extras = ["docker"], version = "*"}
+ansible-lint = "*"
 
 [packages]
 ansible = "<11.1.1"

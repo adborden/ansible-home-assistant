@@ -1,6 +1,7 @@
 ---
 collections:
   - name: community.docker
+  - name: community.hashi_vault  # for awx secrets
 roles:
   - name: hifis.unattended_upgrades
     version: v3.2.1
