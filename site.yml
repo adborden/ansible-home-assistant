@@ -1,6 +1,6 @@
 ---
 - name: Site
-  hosts: all
+  hosts: home-assistant
   become: yes
   become_user: root
   handlers:

@@ -1,6 +1,6 @@
 ---
 - name: Reboot
-  hosts: all
+  hosts: home-assistant
   gather_facts: no
   become: yes
   become_user: root
