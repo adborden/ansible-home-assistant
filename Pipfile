@@ -8,7 +8,7 @@ molecule = {extras = ["docker"], version = "*"}
 ansible-lint = "*"
 
 [packages]
-ansible = "<14.6.1"
+ansible = "<15.0.1"
 hvac = "*"
 
 [requires]
